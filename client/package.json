@@ -1,0 +1,21 @@
+{
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@remix-run/node-fetch-server": "0.9.0",
+        "react": "19.2.0",
+        "react-dom": "19.2.0",
+        "react-router": "7.9.4"
+    },
+    "devDependencies": {
+        "@react-router/dev": "7.9.4",
+        "@react-router/fs-routes": "7.9.4",
+        "@react-router/serve": "^7.9.4",
+        "@types/react": "~19.2.0",
+        "@types/react-dom": "~19.2.0",
+        "@vitejs/plugin-rsc": "~0.4.31",
+        "vite": "catalog:dep",
+        "vite-plugin-devtools-json": "^1.0.0",
+        "vite-tsconfig-paths": "catalog:dep"
+    }
+}

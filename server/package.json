@@ -1,0 +1,14 @@
+{
+    "private": true,
+    "dependencies": {
+        "@jderstd/express": "~0.1.0",
+        "express": "^5.1.0",
+        "mongoose": "^8.19.2"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.3",
+        "vite": "catalog:dep",
+        "vite-plugin-node": "^7.0.0",
+        "vite-tsconfig-paths": "catalog:dep"
+    }
+}
