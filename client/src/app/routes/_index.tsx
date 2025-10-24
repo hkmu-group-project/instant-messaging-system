@@ -14,7 +14,7 @@ return (
           placeholder="Please input yout username"
         />
         <button type="submit">
-          進入聊天室
+          Get in Chatroom
         </button>
       </form>
     </div>
