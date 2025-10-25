@@ -2,6 +2,10 @@
 
 A instant messaging system for users to communicate with each other.
 
+## Workflow
+
+For the workflow, please refer to [workflow.md](./docs/workflow.md).
+
 ## Before the Contribution
 
 Please install the following dependencies:
