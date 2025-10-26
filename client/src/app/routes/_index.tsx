@@ -26,7 +26,6 @@ export default () => {
     
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* 頂部導航欄 */}
       <div style={{
         backgroundColor: '#2c3e50',
         color: 'white',
