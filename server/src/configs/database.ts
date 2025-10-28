@@ -5,8 +5,8 @@ let database: Db;
 
 const connectDatabase = async (): Promise<void> => {
     try {
-        client = await MongoClient.connect(import.meta.env.MONGODB_URI);
-        database = client.db(import.meta.env.MONGODB_DB_NAME);
+        client = await MongoClient.connect(import.meta.env.VITE_MONGODB_URI);
+        database = client.db(import.meta.env.VITE_MONGODB_DB_NAME);
     } catch (_: unknown) {
         throw new Error("Failed to connect to database.");
     }

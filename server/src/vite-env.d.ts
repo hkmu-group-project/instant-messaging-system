@@ -7,8 +7,9 @@ interface ViteTypeOptions {
 }
 
 interface ImportMetaEnv {
-    readonly MONGODB_URI: string;
-    readonly MONGODB_DB_NAME: string;
+    readonly VITE_PORT: string;
+    readonly VITE_MONGODB_URI: string;
+    readonly VITE_MONGODB_DB_NAME: string;
 }
 
 interface ImportMeta {
