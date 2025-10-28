@@ -20,14 +20,30 @@ _:
 i:
     pnpm install
 
+# Lint client with TypeScript Compiler
+tsc-cli:
+    cd ./{{cli}} && ./{{react_router}} typegen && ../{{tsc}} --noEmit
+
+# Lint server with TypeScript Compiler
+tsc-srv:
+    cd ./{{srv}} && ../{{tsc}} --noEmit
+
 # Lint with TypeScript Compiler
 tsc:
-    cd ./{{cli}} && ./{{react_router}} typegen && ../{{tsc}} --noEmit
-    cd ./{{srv}} && ../{{tsc}} --noEmit
+    just tsc-cli
+    just tsc-srv
 
 # Lint code
 lint:
     just tsc
+
+# Format client code
+fmt-cli:
+    ./{{biome}} check --write ./{{cli}}
+
+# Format server code
+fmt-srv:
+    ./{{biome}} check --write ./{{srv}}
 
 # Format code
 fmt:
