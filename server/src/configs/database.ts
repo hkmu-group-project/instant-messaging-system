@@ -4,6 +4,8 @@ let client: MongoClient;
 let database: Db;
 
 const connectDatabase = async (): Promise<void> => {
+    if (database) return void 0;
+    
     try {
         client = await MongoClient.connect(import.meta.env.VITE_MONGODB_URI);
         database = client.db(import.meta.env.VITE_MONGODB_DB_NAME);
