@@ -1,3 +1,5 @@
+import type { Collection } from "mongodb";
+
 import { getDatabase } from "#/configs/database";
 
 const COLLECTION_NAME: string = "user" as const;
@@ -9,7 +11,7 @@ type User = {
     updatedAt: Date;
 };
 
-const user = getDatabase().collection<User>(COLLECTION_NAME);
+const user: Collection<User> = getDatabase().collection<User>(COLLECTION_NAME);
 
 export type { User };
 export { user };
