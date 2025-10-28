@@ -3,7 +3,8 @@
     "dependencies": {
         "@jderstd/express": "~0.1.0",
         "express": "^5.1.0",
-        "mongodb": "^6.20.0"
+        "mongodb": "^6.20.0",
+        "ts-vista": "~0.2.2"
     },
     "devDependencies": {
         "@types/express": "^5.0.3",

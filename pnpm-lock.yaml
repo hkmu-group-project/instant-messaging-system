@@ -87,6 +87,9 @@ importers:
       mongodb:
         specifier: ^6.20.0
         version: 6.20.0
+      ts-vista:
+        specifier: ~0.2.2
+        version: 0.2.2
     devDependencies:
       '@types/express':
         specifier: ^5.0.3
