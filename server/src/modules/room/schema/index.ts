@@ -6,7 +6,7 @@ const COLLECTION_NAME: string = "room" as const;
 
 type Room = {
     name: string;
-    description: string;
+    description?: string;
     createdAt: Date;
     updatedAt: Date;
 };
