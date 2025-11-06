@@ -1,37 +1,37 @@
-import type { Express, NextFunction, Request, Response } from "express";
-
-import express from "express";
+import { serveStatic } from "@hono/node-server/serve-static";
+import { notFoundHandler } from "@jderstd/hono/not-found";
+import { onErrorHandler } from "@jderstd/hono/on-error";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
 
 import { connectDatabase } from "#/configs/database";
-import { PATH_PUBLIC, PORT, START_TIME } from "#/constants";
+import { PATH_PUBLIC } from "#/constants";
 import { router } from "#/router";
 
-const app: Express = express();
+const app: Hono = new Hono();
+
+app.use(async (_, next): Promise<void> => {
+    await connectDatabase();
+    await next();
+});
+
+app.use(cors());
+
+app.route("/", router);
 
 app.use(
-    async (
-        _req: Request,
-        _res: Response,
-        next: NextFunction,
-    ): Promise<void> => {
-        await connectDatabase();
-        next();
-    },
+    "/*",
+    serveStatic({
+        root: PATH_PUBLIC,
+    }),
 );
 
-app.use(express.json());
+app.notFound(notFoundHandler());
 
-app.use("/", router);
+app.onError(
+    onErrorHandler({
+        verbose: true,
+    }),
+);
 
-app.use("/static", express.static(PATH_PUBLIC));
-
-// production
-if (import.meta.env.PROD) {
-    app.listen(PORT, (): void => {
-        console.log(`Server started at ${new Date(START_TIME)}`);
-        console.log(`Server running on port ${PORT}`);
-    });
-}
-
-// development
-export { app };
+export default app;

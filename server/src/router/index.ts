@@ -1,30 +1,13 @@
-import type { Request, Response } from "express";
+import type { Context } from "hono";
 
-import type { HealthInfo } from "#/modules/health/service";
+import { Hono } from "hono";
 
-import { createJsonResponse } from "@jderstd/express";
-import { Router } from "express";
+import { expressHandler } from "#/router/express";
 
-import { serviceHealth } from "#/modules/health/service";
-import { jsRouter } from "#/router/javascript";
-import { tsRouter } from "#/router/typescript";
+const router: Hono = new Hono();
 
-const router: Router = Router();
-
-router.get("/", async (_req: Request, res: Response): Promise<void> => {
-    createJsonResponse(res);
+router.use("/*", async (c: Context): Promise<Response> => {
+    return await expressHandler(c.req.raw);
 });
-
-router.get("/health", async (_req: Request, res: Response): Promise<void> => {
-    const data: HealthInfo = await serviceHealth();
-
-    createJsonResponse(res, {
-        data,
-    });
-});
-
-router.use("/js", jsRouter);
-
-router.use("/ts", tsRouter);
 
 export { router };

@@ -1,15 +1,21 @@
 {
     "private": true,
+    "type": "module",
     "dependencies": {
+        "@hono/node-server": "^1.19.6",
         "@jderstd/express": "~0.1.0",
+        "@jderstd/hono": "~0.6.0",
         "express": "^5.1.0",
+        "hono": "^4.10.4",
         "mongodb": "^6.20.0",
+        "srvx": "~0.9.5",
         "ts-vista": "~0.2.2"
     },
     "devDependencies": {
+        "@hono/vite-build": "^1.7.0",
+        "@hono/vite-dev-server": "~0.23.0",
         "@types/express": "^5.0.3",
         "vite": "catalog:dep",
-        "vite-plugin-node": "^7.0.0",
         "vite-tsconfig-paths": "catalog:dep"
     }
 }

@@ -78,28 +78,43 @@ importers:
 
   server:
     dependencies:
+      '@hono/node-server':
+        specifier: ^1.19.6
+        version: 1.19.6(hono@4.10.4)
       '@jderstd/express':
         specifier: ~0.1.0
         version: 0.1.0(@types/express@5.0.3)(express@5.1.0)
+      '@jderstd/hono':
+        specifier: ~0.6.0
+        version: 0.6.0(hono@4.10.4)
       express:
         specifier: ^5.1.0
         version: 5.1.0
+      hono:
+        specifier: ^4.10.4
+        version: 4.10.4
       mongodb:
         specifier: ^6.20.0
         version: 6.20.0
+      srvx:
+        specifier: ~0.9.5
+        version: 0.9.5
       ts-vista:
         specifier: ~0.2.2
         version: 0.2.2
     devDependencies:
+      '@hono/vite-build':
+        specifier: ^1.7.0
+        version: 1.7.0(hono@4.10.4)
+      '@hono/vite-dev-server':
+        specifier: ~0.23.0
+        version: 0.23.0(hono@4.10.4)
       '@types/express':
         specifier: ^5.0.3
         version: 5.0.3
       vite:
         specifier: catalog:dep
         version: 7.1.11(@types/node@24.5.2)
-      vite-plugin-node:
-        specifier: ^7.0.0
-        version: 7.0.0(vite@7.1.11(@types/node@24.5.2))
       vite-tsconfig-paths:
         specifier: catalog:dep
         version: 5.1.4(typescript@5.9.3)(vite@7.1.11(@types/node@24.5.2))
@@ -464,6 +479,31 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@hono/node-server@1.19.6':
+    resolution: {integrity: sha512-Shz/KjlIeAhfiuE93NDKVdZ7HdBVLQAfdbaXEaoAVO3ic9ibRSLGIQGkcBbFyuLr+7/1D5ZCINM8B+6IvXeMtw==}
+    engines: {node: '>=18.14.1'}
+    peerDependencies:
+      hono: ^4
+
+  '@hono/vite-build@1.7.0':
+    resolution: {integrity: sha512-L73WBed5teC7DHTzXYkho83POYYluD2rTkbT76FJuqpfXPgTW/PsbIa8O0YcCETE3VUoh584fe6vuLAM5ctjww==}
+    engines: {node: '>=18.14.1'}
+    peerDependencies:
+      hono: '*'
+
+  '@hono/vite-dev-server@0.23.0':
+    resolution: {integrity: sha512-tHV86xToed9Up0j/dubQW2PDP4aYNFDSfQrjcV6Ra7bqCGrxhtg/zZBmbgSco3aTxKOEPzDXKK+6seAAfsbIXw==}
+    engines: {node: '>=18.14.1'}
+    peerDependencies:
+      hono: '*'
+      miniflare: '*'
+      wrangler: '*'
+    peerDependenciesMeta:
+      miniflare:
+        optional: true
+      wrangler:
+        optional: true
+
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
@@ -476,6 +516,11 @@ packages:
     peerDependencies:
       '@types/express': ^5.0.0
       express: ^5.0.0
+
+  '@jderstd/hono@0.6.0':
+    resolution: {integrity: sha512-VG5yY2R6nsMFhP3SvTa578I98XXROZ6ZIeZdNA8C3HuguRUi77G3IHng7sKgO5ROV7XLI+UHoRBCbje8blZ0tA==}
+    peerDependencies:
+      hono: ^4.5.0
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -579,10 +624,6 @@ packages:
 
   '@remix-run/node-fetch-server@0.9.0':
     resolution: {integrity: sha512-SoLMv7dbH+njWzXnOY6fI08dFMI5+/dQ+vY3n8RnnbdG7MdJEgiP28Xj/xWlnRnED/aB6SFw56Zop+LbmaaKqA==}
-
-  '@rollup/pluginutils@4.2.1':
-    resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
-    engines: {node: '>= 8.0.0'}
 
   '@rollup/rollup-android-arm-eabi@4.52.5':
     resolution: {integrity: sha512-8c1vW4ocv3UOMp9K+gToY5zL2XiiVw3k7f1ksf4yO1FlDFQ1C2u72iACFnSOceJFsWskc2WZNqeRhFRPzv+wtQ==}
@@ -851,10 +892,6 @@ packages:
   caniuse-lite@1.0.30001751:
     resolution: {integrity: sha512-A0QJhug0Ly64Ii3eIqHu5X51ebln3k4yTUkY1j8drqpWHVreg/VLijN48cZ1bYPiqOQuqpkIKnzr/Ul8V+p6Cw==}
 
-  chalk@4.1.2:
-    resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
-    engines: {node: '>=10'}
-
   chokidar@4.0.3:
     resolution: {integrity: sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA==}
     engines: {node: '>= 14.16.0'}
@@ -914,10 +951,6 @@ packages:
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
-
-  debounce@2.2.0:
-    resolution: {integrity: sha512-Xks6RUDLZFdz8LIdR6q0MTH44k7FikOmnh5xkSjMig6ch45afc8sjTjRQf3P6ax8dMgcQrYO/AR2RGWURrruqw==}
-    engines: {node: '>=18'}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -1009,9 +1042,6 @@ packages:
   escape-html@1.0.3:
     resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
 
-  estree-walker@2.0.2:
-    resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
-
   estree-walker@3.0.3:
     resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
 
@@ -1099,10 +1129,6 @@ packages:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
 
-  has-flag@4.0.0:
-    resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
-    engines: {node: '>=8'}
-
   has-symbols@1.1.0:
     resolution: {integrity: sha512-1cDNdwJ2Jaohmb3sg4OmKaMBwuC48sYni5HUw2DvsC8LjGTLK9h+eb1X6RyuOHe4hT0ULCW68iomhjUoKUqlPQ==}
     engines: {node: '>= 0.4'}
@@ -1110,6 +1136,10 @@ packages:
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
+
+  hono@4.10.4:
+    resolution: {integrity: sha512-YG/fo7zlU3KwrBL5vDpWKisLYiM+nVstBQqfr7gCPbSYURnNEP9BDxEMz8KfsDR9JX0lJWDRNc6nXX31v7ZEyg==}
+    engines: {node: '>=16.9.0'}
 
   hosted-git-info@6.1.3:
     resolution: {integrity: sha512-HVJyzUrLIL1c0QmviVh5E8VGyUS7xCFPS6yydaVd1UegW+ibV/CohqTH9MkOLDp5o+rb82DMo77PTuc9F/8GKw==}
@@ -1382,10 +1412,6 @@ packages:
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
-  picomatch@2.3.1:
-    resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
-    engines: {node: '>=8.6'}
-
   picomatch@4.0.3:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
@@ -1580,6 +1606,11 @@ packages:
   spdx-license-ids@3.0.22:
     resolution: {integrity: sha512-4PRT4nh1EImPbt2jASOKHX7PB7I+e4IWNLvkKFDxNhJlfjbYlleYQh285Z/3mPTHSAK/AvdMmw5BNNuYH8ShgQ==}
 
+  srvx@0.9.5:
+    resolution: {integrity: sha512-nQsA2c8q3XwbSn6kTxVQjz0zS096rV+Be2pzJwrYEAdtnYszLw4MTy8JWJjz1XEGBZwP0qW51SUIX3WdjdRemQ==}
+    engines: {node: '>=20.16.0'}
+    hasBin: true
+
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
     engines: {node: '>= 0.8'}
@@ -1603,10 +1634,6 @@ packages:
   strip-ansi@7.1.2:
     resolution: {integrity: sha512-gmBGslpoQJtgnMAvOVqGZpEz9dyoKTCzy2nfz/n8aIFhN/jCE/rCmcxabB6jOOHV+0WNnylOxaxBQPSvcWklhA==}
     engines: {node: '>=12'}
-
-  supports-color@7.2.0:
-    resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
-    engines: {node: '>=8'}
 
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
@@ -1698,15 +1725,6 @@ packages:
     resolution: {integrity: sha512-MobvwqX76Vqt/O4AbnNMNWoXWGrKUqZbphCUle/J2KXH82yKQiunOeKnz/nqEPosPsoWWPP9FtNuPBSYpiiwkw==}
     peerDependencies:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0
-
-  vite-plugin-node@7.0.0:
-    resolution: {integrity: sha512-FZqTHvCXUu+U8i6qMtlZCrEvlelUioEf6J4S77XHpZk73frveqKVot60W0hpbffv5OMECXYwP/LAiTGAOLN4/g==}
-    peerDependencies:
-      '@swc/core': ^1.7.26
-      vite: ^7.0.0
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
 
   vite-tsconfig-paths@5.1.4:
     resolution: {integrity: sha512-cYj0LRuLV2c2sMqhqhGpaO3LretdtMn/BVX4cPLanIZuwwrkVl+lK84E/miEXkCHWXuq65rhNN4rXsBcOB3S4w==}
@@ -2108,6 +2126,20 @@ snapshots:
   '@esbuild/win32-x64@0.25.11':
     optional: true
 
+  '@hono/node-server@1.19.6(hono@4.10.4)':
+    dependencies:
+      hono: 4.10.4
+
+  '@hono/vite-build@1.7.0(hono@4.10.4)':
+    dependencies:
+      hono: 4.10.4
+
+  '@hono/vite-dev-server@0.23.0(hono@4.10.4)':
+    dependencies:
+      '@hono/node-server': 1.19.6(hono@4.10.4)
+      hono: 4.10.4
+      minimatch: 9.0.5
+
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
@@ -2126,6 +2158,12 @@ snapshots:
       '@jderstd/core': 0.4.0
       '@types/express': 5.0.3
       express: 5.1.0
+
+  '@jderstd/hono@0.6.0(hono@4.10.4)':
+    dependencies:
+      '@jderstd/core': 0.4.0
+      hono: 4.10.4
+      ts-vista: 0.2.2
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -2275,11 +2313,6 @@ snapshots:
   '@remix-run/node-fetch-server@0.8.1': {}
 
   '@remix-run/node-fetch-server@0.9.0': {}
-
-  '@rollup/pluginutils@4.2.1':
-    dependencies:
-      estree-walker: 2.0.2
-      picomatch: 2.3.1
 
   '@rollup/rollup-android-arm-eabi@4.52.5':
     optional: true
@@ -2529,11 +2562,6 @@ snapshots:
 
   caniuse-lite@1.0.30001751: {}
 
-  chalk@4.1.2:
-    dependencies:
-      ansi-styles: 4.3.0
-      supports-color: 7.2.0
-
   chokidar@4.0.3:
     dependencies:
       readdirp: 4.1.2
@@ -2589,8 +2617,6 @@ snapshots:
       which: 2.0.2
 
   csstype@3.1.3: {}
-
-  debounce@2.2.0: {}
 
   debug@2.6.9:
     dependencies:
@@ -2670,8 +2696,6 @@ snapshots:
   escalade@3.2.0: {}
 
   escape-html@1.0.3: {}
-
-  estree-walker@2.0.2: {}
 
   estree-walker@3.0.3:
     dependencies:
@@ -2827,13 +2851,13 @@ snapshots:
 
   gopd@1.2.0: {}
 
-  has-flag@4.0.0: {}
-
   has-symbols@1.1.0: {}
 
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+
+  hono@4.10.4: {}
 
   hosted-git-info@6.1.3:
     dependencies:
@@ -3045,8 +3069,6 @@ snapshots:
       zimmerframe: 1.1.4
 
   picocolors@1.1.1: {}
-
-  picomatch@2.3.1: {}
 
   picomatch@4.0.3: {}
 
@@ -3288,6 +3310,8 @@ snapshots:
 
   spdx-license-ids@3.0.22: {}
 
+  srvx@0.9.5: {}
+
   statuses@2.0.1: {}
 
   statuses@2.0.2: {}
@@ -3311,10 +3335,6 @@ snapshots:
   strip-ansi@7.1.2:
     dependencies:
       ansi-regex: 6.2.2
-
-  supports-color@7.2.0:
-    dependencies:
-      has-flag: 4.0.0
 
   tinyglobby@0.2.15:
     dependencies:
@@ -3400,16 +3420,6 @@ snapshots:
     dependencies:
       uuid: 11.1.0
       vite: 7.1.11(@types/node@24.5.2)
-
-  vite-plugin-node@7.0.0(vite@7.1.11(@types/node@24.5.2)):
-    dependencies:
-      '@rollup/pluginutils': 4.2.1
-      chalk: 4.1.2
-      debounce: 2.2.0
-      debug: 4.4.3
-      vite: 7.1.11(@types/node@24.5.2)
-    transitivePeerDependencies:
-      - supports-color
 
   vite-tsconfig-paths@5.1.4(typescript@5.9.3)(vite@7.1.11(@types/node@24.5.2)):
     dependencies:
