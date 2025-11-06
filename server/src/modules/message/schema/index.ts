@@ -1,10 +1,11 @@
-import type { Collection } from "mongodb";
+import type { Collection, ObjectId } from "mongodb";
 
 import { getDatabase } from "#/configs/database";
 
 const COLLECTION_NAME: string = "message" as const;
 
 type Message = {
+    roomId: ObjectId;
     sender: string;
     content: string;
     createdAt: Date;
