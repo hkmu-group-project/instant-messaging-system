@@ -1,4 +1,5 @@
 import type { Collection } from "mongodb";
+import type { Format, Omit } from "ts-vista";
 
 import { getDatabase } from "#/configs/database";
 
@@ -11,7 +12,9 @@ type User = {
     updatedAt: Date;
 };
 
+type ProtectedUser = Format<Omit<User, "password">>;
+
 const user: Collection<User> = getDatabase().collection<User>(COLLECTION_NAME);
 
-export type { User };
+export type { User, ProtectedUser };
 export { user };
