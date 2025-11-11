@@ -1,0 +1,72 @@
+import type { WithId } from "mongodb";
+import type { Format } from "ts-vista";
+
+import type { User } from "#/modules/user/schema";
+
+import { hash } from "@node-rs/argon2";
+
+import { createUser, findUserByName } from "#/modules/user/sql";
+import { ServiceError } from "#/utils/service-error";
+
+type ServiceUserRegisterOptions = Format<Pick<User, "name" | "password">>;
+
+enum ServiceUserRegisterErrorCode {
+    DUPLICATE = "duplicate",
+    UNKNOWN = "unknown",
+}
+
+const getRegisterErrorMessage = (
+    code: ServiceUserRegisterErrorCode,
+): string => {
+    switch (code) {
+        case ServiceUserRegisterErrorCode.DUPLICATE:
+            return "User already exists";
+        case ServiceUserRegisterErrorCode.UNKNOWN:
+            return "Unknown error";
+    }
+};
+
+const serviceUserRegister = async (
+    options: ServiceUserRegisterOptions,
+): Promise<true> => {
+    try {
+        // check duplicate
+
+        const duplicate: WithId<User> | null = await findUserByName(
+            options.name,
+        );
+
+        if (duplicate) {
+            const code: ServiceUserRegisterErrorCode =
+                ServiceUserRegisterErrorCode.DUPLICATE;
+
+            throw new ServiceError(code).setMessage(
+                getRegisterErrorMessage(code),
+            );
+        }
+
+        // hash user password
+
+        const hashed: string = await hash(options.password);
+
+        // create user
+
+        await createUser({
+            name: options.name,
+            password: hashed,
+        });
+
+        return true;
+    } catch (_: unknown) {
+        const code: ServiceUserRegisterErrorCode =
+            ServiceUserRegisterErrorCode.UNKNOWN;
+        throw new ServiceError(code).setMessage(getRegisterErrorMessage(code));
+    }
+};
+
+export type {
+    ServiceUserRegisterOptions,
+    ServiceUserRegisterErrorCode,
+    ServiceError,
+};
+export { serviceUserRegister };

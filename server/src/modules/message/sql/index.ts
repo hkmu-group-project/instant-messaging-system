@@ -1,9 +1,4 @@
-import type {
-    DeleteResult,
-    InsertOneResult,
-    ObjectId,
-    WithId,
-} from "mongodb";
+import type { DeleteResult, InsertOneResult, ObjectId, WithId } from "mongodb";
 import type { Format } from "ts-vista";
 
 import type { Message } from "#/modules/message/schema";

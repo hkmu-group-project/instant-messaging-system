@@ -1,9 +1,13 @@
 import * as Path from "node:path";
 
+const IS_DEV: boolean = import.meta.env.DEV;
+
+const IS_PRD: boolean = import.meta.env.PROD;
+
 /**
  * The path to the public directory.
  */
-const PATH_PUBLIC: string = import.meta.env.PROD
+const PATH_PUBLIC: string = IS_PRD
     ? Path.join(__dirname)
     : Path.join(process.cwd(), "public");
 
@@ -13,6 +17,26 @@ const PATH_PUBLIC: string = import.meta.env.PROD
  * By default, it is `3000`.
  */
 const PORT: number = Number(import.meta.env.VITE_PORT) || 3000;
+
+/**
+ * The MongoDB connection URI.
+ */
+const MONGODB_URI: string = import.meta.env.VITE_MONGODB_URI;
+
+/**
+ * The MongoDB database name.
+ */
+const MONGODB_DB_NAME: string = import.meta.env.VITE_MONGODB_DB_NAME;
+
+/**
+ * The refresh token secret.
+ */
+const REFRESH_SECRET: string = import.meta.env.VITE_REFRESH_SECRET;
+
+/**
+ * The access token secret.
+ */
+const ACCESS_SECRET: string = import.meta.env.VITE_ACCESS_SECRET;
 
 /**
  * The time the server started at.
@@ -49,4 +73,15 @@ const getUptime = (): Uptime => {
     };
 };
 
-export { PATH_PUBLIC, PORT, START_TIME, getUptime };
+export {
+    IS_DEV,
+    IS_PRD,
+    PATH_PUBLIC,
+    PORT,
+    MONGODB_URI,
+    MONGODB_DB_NAME,
+    REFRESH_SECRET,
+    ACCESS_SECRET,
+    START_TIME,
+    getUptime,
+};
