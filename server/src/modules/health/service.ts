@@ -1,8 +1,12 @@
+import z from "zod";
+
 import { getUptime } from "#/constants";
 
-type HealthInfo = {
-    uptime: number;
-};
+const healthInfoSchema = z.object({
+    uptime: z.number(),
+});
+
+type HealthInfo = z.infer<typeof healthInfoSchema>;
 
 const serviceHealth = async (): Promise<HealthInfo> => {
     return {
@@ -11,4 +15,4 @@ const serviceHealth = async (): Promise<HealthInfo> => {
 };
 
 export type { HealthInfo };
-export { serviceHealth };
+export { healthInfoSchema, serviceHealth };
