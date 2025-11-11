@@ -24,12 +24,19 @@ enum ServiceUserLoginErrorCode {
     UNKNOWN = "unknown",
 }
 
-const getLoginErrorMessage = (code: ServiceUserLoginErrorCode): string => {
+enum ServiceUserLoginErrorMessage {
+    INVALID = "Invalid username or password",
+    UNKNOWN = "Unknown error",
+}
+
+const getLoginErrorMessage = (
+    code: ServiceUserLoginErrorCode,
+): ServiceUserLoginErrorMessage => {
     switch (code) {
         case ServiceUserLoginErrorCode.INVALID:
-            return "Invalid username or password";
+            return ServiceUserLoginErrorMessage.INVALID;
         case ServiceUserLoginErrorCode.UNKNOWN:
-            return "Unknown error";
+            return ServiceUserLoginErrorMessage.UNKNOWN;
     }
 };
 
@@ -98,10 +105,9 @@ const serviceUserLogin = async (
     }
 };
 
-export type {
-    ServiceUserLoginOptions,
-    ServiceUserLoginResult,
+export type { ServiceUserLoginOptions, ServiceUserLoginResult, ServiceError };
+export {
     ServiceUserLoginErrorCode,
-    ServiceError,
+    ServiceUserLoginErrorMessage,
+    serviceUserLogin,
 };
-export { serviceUserLogin };

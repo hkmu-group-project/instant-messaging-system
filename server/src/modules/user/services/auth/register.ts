@@ -15,14 +15,19 @@ enum ServiceUserRegisterErrorCode {
     UNKNOWN = "unknown",
 }
 
+enum ServiceUserRegisterErrorMessage {
+    DUPLICATE = "User already exists",
+    UNKNOWN = "Unknown error",
+}
+
 const getRegisterErrorMessage = (
     code: ServiceUserRegisterErrorCode,
-): string => {
+): ServiceUserRegisterErrorMessage => {
     switch (code) {
         case ServiceUserRegisterErrorCode.DUPLICATE:
-            return "User already exists";
+            return ServiceUserRegisterErrorMessage.DUPLICATE;
         case ServiceUserRegisterErrorCode.UNKNOWN:
-            return "Unknown error";
+            return ServiceUserRegisterErrorMessage.UNKNOWN;
     }
 };
 
@@ -64,9 +69,9 @@ const serviceUserRegister = async (
     }
 };
 
-export type {
-    ServiceUserRegisterOptions,
+export type { ServiceUserRegisterOptions, ServiceError };
+export {
     ServiceUserRegisterErrorCode,
-    ServiceError,
+    ServiceUserRegisterErrorMessage,
+    serviceUserRegister,
 };
-export { serviceUserRegister };

@@ -1,6 +1,6 @@
 import type { Collection, ObjectId } from "mongodb";
 
-import { getDatabase } from "#/configs/database";
+import { db } from "#/configs/database";
 
 const COLLECTION_NAME: string = "message" as const;
 
@@ -12,8 +12,7 @@ type Message = {
     updatedAt: Date;
 };
 
-const message: Collection<Message> =
-    getDatabase().collection<Message>(COLLECTION_NAME);
+const message: Collection<Message> = db.collection<Message>(COLLECTION_NAME);
 
 export type { Message };
 export { message };

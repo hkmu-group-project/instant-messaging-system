@@ -1,22 +1,25 @@
-import { type Db, MongoClient } from "mongodb";
+import type { Db } from "mongodb";
 
-let client: MongoClient;
+import { MongoClient } from "mongodb";
+
+import { MONGODB_DB_NAME, MONGODB_URI } from "#/constants";
+
 let database: Db;
 
 const connectDatabase = async (): Promise<void> => {
-    if (database) return void 0;
-
     try {
-        client = await MongoClient.connect(import.meta.env.VITE_MONGODB_URI);
-        database = client.db(import.meta.env.VITE_MONGODB_DB_NAME);
+        const client: MongoClient = await MongoClient.connect(MONGODB_URI);
+        database = client.db(MONGODB_DB_NAME);
     } catch (_: unknown) {
         throw new Error("Failed to connect to database.");
     }
 };
 
-const getDatabase = (): Db => {
-    if (!database) throw new Error("Database is not connected.");
+const getDatabase = async (): Promise<Db> => {
+    if (!database) await connectDatabase();
     return database;
 };
 
-export { connectDatabase, getDatabase };
+const db: Db = await getDatabase();
+
+export { db };

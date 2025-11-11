@@ -8,6 +8,12 @@ dist/
 # Modules
 node_modules/
 
+# Env
+.env.development
+.env.test
+.env.production
+.env.*.local
+
 # Logs
 *.log
 pnpm-debug.log*

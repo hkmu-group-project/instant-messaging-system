@@ -11,11 +11,11 @@ const createJsonSuccessResponseSchema = (data: z.ZodType) => {
     });
 };
 
-const createJsonResponseErrorSchema = (code: z.ZodType) => {
+const createJsonResponseErrorSchema = (code: z.ZodType, message: z.ZodType) => {
     return z.object({
         code,
         path: z.array(z.string()),
-        message: z.string(),
+        message,
     });
 };
 

@@ -4,14 +4,12 @@ import { onErrorHandler } from "@jderstd/hono/on-error";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { connectDatabase } from "#/configs/database";
 import { PATH_PUBLIC } from "#/constants";
 import { router } from "#/router";
 
 const app: Hono = new Hono();
 
 app.use(async (_, next): Promise<void> => {
-    await connectDatabase();
     await next();
 });
 

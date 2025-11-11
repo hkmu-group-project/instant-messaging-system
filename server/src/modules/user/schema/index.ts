@@ -1,7 +1,7 @@
 import type { Collection } from "mongodb";
 import type { Format, Omit } from "ts-vista";
 
-import { getDatabase } from "#/configs/database";
+import { db } from "#/configs/database";
 
 const COLLECTION_NAME: string = "user" as const;
 
@@ -14,7 +14,7 @@ type User = {
 
 type ProtectedUser = Format<Omit<User, "password">>;
 
-const user: Collection<User> = getDatabase().collection<User>(COLLECTION_NAME);
+const user: Collection<User> = db.collection<User>(COLLECTION_NAME);
 
 export type { User, ProtectedUser };
 export { user };

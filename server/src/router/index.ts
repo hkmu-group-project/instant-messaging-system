@@ -15,6 +15,7 @@ import {
 } from "#/@types/zod";
 import { healthInfoSchema } from "#/modules/health/service";
 import { healthHandler } from "#/router/health";
+import { routerUser } from "#/router/user";
 
 const router: Hono = new Hono();
 
@@ -57,6 +58,8 @@ router.get(
         return await healthHandler(c.req.raw);
     },
 );
+
+router.route("/user", routerUser);
 
 router.get(
     "/openapi.json",

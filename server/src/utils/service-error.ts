@@ -1,6 +1,10 @@
-import type { JsonResponse, JsonResponseError } from "@jderstd/hono/response";
+import type { JsonResponseError } from "@jderstd/hono/response";
+import type { StatusCode } from "hono/utils/http-status";
+
+import { createJsonResponse } from "@jderstd/hono/response";
 
 class ServiceError extends Error {
+    protected status: StatusCode = 500;
     protected code: string = "";
     protected path: string[] = [];
 
@@ -9,24 +13,36 @@ class ServiceError extends Error {
         this.setCode(code);
     }
 
-    public setCode(code: string): void {
+    public setStatus(status: StatusCode): ServiceError {
+        this.status = status;
+        return this;
+    }
+
+    public getStatus(): StatusCode {
+        return this.status;
+    }
+
+    public setCode(code: string): ServiceError {
         this.code = code;
+        return this;
     }
 
     public getCode(): string {
         return this.code;
     }
 
-    public setPath(path: string[]): void {
+    public setPath(path: string[]): ServiceError {
         this.path = path;
+        return this;
     }
 
     public getPath(): string[] {
         return this.path;
     }
 
-    public setMessage(message: string): void {
+    public setMessage(message: string): ServiceError {
         this.message = message;
+        return this;
     }
 
     public getMessage(): string {
@@ -41,14 +57,30 @@ class ServiceError extends Error {
         };
     }
 
-    public toJsonResponse(): JsonResponse {
-        return {
-            success: false,
+    public toJsonResponse(): Response {
+        return createJsonResponse({
+            status: this.getStatus(),
             errors: [
                 this.toJsonResponseError(),
             ],
-        };
+        });
     }
 }
 
-export { ServiceError };
+const routerErrorHandler = (error: unknown): Response => {
+    if (error instanceof ServiceError) {
+        return error.toJsonResponse();
+    }
+
+    return createJsonResponse({
+        status: 500,
+        errors: [
+            {
+                code: "unknown",
+                message: "Unknown error",
+            },
+        ],
+    });
+};
+
+export { ServiceError, routerErrorHandler };

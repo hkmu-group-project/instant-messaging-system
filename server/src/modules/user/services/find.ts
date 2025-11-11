@@ -19,14 +19,22 @@ enum ServiceUserFindErrorCode {
     UNKNOWN = "unknown",
 }
 
-const getErrorMessage = (code: ServiceUserFindErrorCode): string => {
+enum ServiceUserFindErrorMessage {
+    MISSING = "Missing id or name",
+    NOT_FOUND = "User not found",
+    UNKNOWN = "Unknown error",
+}
+
+const getErrorMessage = (
+    code: ServiceUserFindErrorCode,
+): ServiceUserFindErrorMessage => {
     switch (code) {
         case ServiceUserFindErrorCode.MISSING:
-            return "Missing id or name";
+            return ServiceUserFindErrorMessage.MISSING;
         case ServiceUserFindErrorCode.NOT_FOUND:
-            return "User not found";
+            return ServiceUserFindErrorMessage.NOT_FOUND;
         case ServiceUserFindErrorCode.UNKNOWN:
-            return "Unknown error";
+            return ServiceUserFindErrorMessage.UNKNOWN;
     }
 };
 
@@ -46,14 +54,18 @@ const serviceUserFind = async (
             const code: ServiceUserFindErrorCode =
                 ServiceUserFindErrorCode.MISSING;
 
-            throw new ServiceError(code).setMessage(getErrorMessage(code));
+            throw new ServiceError(code)
+                .setStatus(400)
+                .setMessage(getErrorMessage(code));
         }
 
         if (!user) {
             const code: ServiceUserFindErrorCode =
                 ServiceUserFindErrorCode.NOT_FOUND;
 
-            throw new ServiceError(code).setMessage(getErrorMessage(code));
+            throw new ServiceError(code)
+                .setStatus(404)
+                .setMessage(getErrorMessage(code));
         }
 
         return {
@@ -64,9 +76,12 @@ const serviceUserFind = async (
         };
     } catch (_: unknown) {
         const code: ServiceUserFindErrorCode = ServiceUserFindErrorCode.UNKNOWN;
-
         throw new ServiceError(code).setMessage(getErrorMessage(code));
     }
 };
 
-export { serviceUserFind };
+export {
+    ServiceUserFindErrorCode,
+    ServiceUserFindErrorMessage,
+    serviceUserFind,
+};
