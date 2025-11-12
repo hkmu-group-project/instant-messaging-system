@@ -7,6 +7,8 @@ import nodeAdapter from "@hono/vite-dev-server/node";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+import { dependencies } from "./package.json";
+
 const __filename: string = Url.fileURLToPath(import.meta.url);
 const __dirname: string = Path.dirname(__filename);
 
@@ -24,6 +26,9 @@ export default defineConfig({
         build({
             port: 4000,
             entry: "./src/index.ts",
+            external: [
+                ...Object.keys(dependencies),
+            ],
             minify: true,
             emptyOutDir: true,
         }),

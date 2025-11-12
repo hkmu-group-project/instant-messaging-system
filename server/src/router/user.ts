@@ -5,7 +5,7 @@ import { createJsonResponse } from "@jderstd/hono/response";
 import { describeRoute, resolver, validator } from "@jderstd/hono-openapi";
 import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
-import z from "zod";
+import { z } from "zod";
 
 import {
     createJsonFailureResponseSchema,
