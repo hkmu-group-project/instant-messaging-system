@@ -23,7 +23,11 @@ import {
     ServiceUserUpdateErrorMessage,
     serviceUserUpdate,
 } from "#/modules/user/services/update";
-import { routerErrorHandler } from "#/utils/service-error";
+import {
+    routerErrorHandler,
+    SERVICE_ERROR_UNKNOWN_CODE,
+    SERVICE_ERROR_UNKNOWN_MESSAGE,
+} from "#/utils/service-error";
 
 const router: Hono = new Hono();
 
@@ -100,10 +104,8 @@ router.get(
                         schema: resolver(
                             createJsonFailureResponseSchema(
                                 createJsonResponseErrorSchema(
-                                    z.literal(ServiceUserFindErrorCode.UNKNOWN),
-                                    z.literal(
-                                        ServiceUserFindErrorMessage.UNKNOWN,
-                                    ),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_CODE),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_MESSAGE),
                                 ),
                             ),
                         ),
@@ -166,6 +168,44 @@ router.post(
                     },
                 },
             },
+            401: {
+                description: "Unauthorized user",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonFailureResponseSchema(
+                                createJsonResponseErrorSchema(
+                                    z.literal(
+                                        ServiceUserUpdateErrorCode.UNAUTHORIZED,
+                                    ),
+                                    z.literal(
+                                        ServiceUserUpdateErrorMessage.UNAUTHORIZED,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    },
+                },
+            },
+            403: {
+                description: "Forbidden access",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonFailureResponseSchema(
+                                createJsonResponseErrorSchema(
+                                    z.literal(
+                                        ServiceUserUpdateErrorCode.FORBIDDEN,
+                                    ),
+                                    z.literal(
+                                        ServiceUserUpdateErrorMessage.FORBIDDEN,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    },
+                },
+            },
             404: {
                 description: "User not found",
                 content: {
@@ -192,12 +232,8 @@ router.post(
                         schema: resolver(
                             createJsonFailureResponseSchema(
                                 createJsonResponseErrorSchema(
-                                    z.literal(
-                                        ServiceUserUpdateErrorCode.UNKNOWN,
-                                    ),
-                                    z.literal(
-                                        ServiceUserUpdateErrorMessage.UNKNOWN,
-                                    ),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_CODE),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_MESSAGE),
                                 ),
                             ),
                         ),

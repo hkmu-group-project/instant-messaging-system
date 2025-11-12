@@ -12,12 +12,10 @@ type ServiceUserRegisterOptions = Format<Pick<User, "name" | "password">>;
 
 enum ServiceUserRegisterErrorCode {
     DUPLICATE = "duplicate",
-    UNKNOWN = "unknown",
 }
 
 enum ServiceUserRegisterErrorMessage {
     DUPLICATE = "User already exists",
-    UNKNOWN = "Unknown error",
 }
 
 const getRegisterErrorMessage = (
@@ -26,45 +24,35 @@ const getRegisterErrorMessage = (
     switch (code) {
         case ServiceUserRegisterErrorCode.DUPLICATE:
             return ServiceUserRegisterErrorMessage.DUPLICATE;
-        case ServiceUserRegisterErrorCode.UNKNOWN:
-            return ServiceUserRegisterErrorMessage.UNKNOWN;
     }
 };
 
 const serviceUserRegister = async (
     options: ServiceUserRegisterOptions,
 ): Promise<void> => {
-    try {
-        // check duplicate
+    // check duplicate
 
-        const duplicate: WithId<User> | null = await findUserByName(
-            options.name,
-        );
+    const duplicate: WithId<User> | null = await findUserByName(options.name);
 
-        if (duplicate) {
-            const code: ServiceUserRegisterErrorCode =
-                ServiceUserRegisterErrorCode.DUPLICATE;
-
-            throw new ServiceError(code)
-                .setStatus(409)
-                .setMessage(getRegisterErrorMessage(code));
-        }
-
-        // hash user password
-
-        const hashed: string = await hash(options.password);
-
-        // create user
-
-        await createUser({
-            name: options.name,
-            password: hashed,
-        });
-    } catch (_: unknown) {
+    if (duplicate) {
         const code: ServiceUserRegisterErrorCode =
-            ServiceUserRegisterErrorCode.UNKNOWN;
-        throw new ServiceError(code).setMessage(getRegisterErrorMessage(code));
+            ServiceUserRegisterErrorCode.DUPLICATE;
+
+        throw new ServiceError(code)
+            .setStatus(409)
+            .setMessage(getRegisterErrorMessage(code));
     }
+
+    // hash user password
+
+    const hashed: string = await hash(options.password);
+
+    // create user
+
+    await createUser({
+        name: options.name,
+        password: hashed,
+    });
 };
 
 export type { ServiceUserRegisterOptions, ServiceError };

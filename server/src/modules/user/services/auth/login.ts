@@ -22,12 +22,10 @@ type ServiceUserLoginResult = {
 
 enum ServiceUserLoginErrorCode {
     INVALID = "invalid",
-    UNKNOWN = "unknown",
 }
 
 enum ServiceUserLoginErrorMessage {
     INVALID = "Invalid username or password",
-    UNKNOWN = "Unknown error",
 }
 
 const getLoginErrorMessage = (
@@ -36,75 +34,66 @@ const getLoginErrorMessage = (
     switch (code) {
         case ServiceUserLoginErrorCode.INVALID:
             return ServiceUserLoginErrorMessage.INVALID;
-        case ServiceUserLoginErrorCode.UNKNOWN:
-            return ServiceUserLoginErrorMessage.UNKNOWN;
     }
 };
 
 const serviceUserLogin = async (
     options: ServiceUserLoginOptions,
 ): Promise<ServiceUserLoginResult> => {
-    try {
-        // find user
+    // find user
 
-        const user: WithId<User> | null = await findUserByName(options.name);
+    const user: WithId<User> | null = await findUserByName(options.name);
 
-        if (!user) {
-            const code: ServiceUserLoginErrorCode =
-                ServiceUserLoginErrorCode.INVALID;
-
-            throw new ServiceError(code).setMessage(getLoginErrorMessage(code));
-        }
-
-        // check password
-
-        const isValid: boolean = await verify(user.password, options.password);
-
-        if (!isValid) {
-            const code: ServiceUserLoginErrorCode =
-                ServiceUserLoginErrorCode.INVALID;
-
-            throw new ServiceError(code)
-                .setStatus(401)
-                .setMessage(getLoginErrorMessage(code));
-        }
-
-        // create token
-
-        const payload = {
-            id: user._id.toString(),
-            name: user.name,
-            iat: Date.now(),
-        } as const;
-
-        const refresh: string = await sign(
-            {
-                ...payload,
-                exp: refresh_exp,
-            },
-            REFRESH_SECRET,
-        );
-
-        const access: string = await sign(
-            {
-                ...payload,
-                exp: access_exp,
-            },
-            ACCESS_SECRET,
-        );
-
-        return {
-            id: user._id.toString(),
-            name: user.name,
-            refresh,
-            access,
-        };
-    } catch (_: unknown) {
+    if (!user) {
         const code: ServiceUserLoginErrorCode =
-            ServiceUserLoginErrorCode.UNKNOWN;
+            ServiceUserLoginErrorCode.INVALID;
 
         throw new ServiceError(code).setMessage(getLoginErrorMessage(code));
     }
+
+    // check password
+
+    const isValid: boolean = await verify(user.password, options.password);
+
+    if (!isValid) {
+        const code: ServiceUserLoginErrorCode =
+            ServiceUserLoginErrorCode.INVALID;
+
+        throw new ServiceError(code)
+            .setStatus(401)
+            .setMessage(getLoginErrorMessage(code));
+    }
+
+    // create token
+
+    const payload = {
+        id: user._id.toString(),
+        name: user.name,
+        iat: Date.now(),
+    } as const;
+
+    const refresh: string = await sign(
+        {
+            ...payload,
+            exp: refresh_exp,
+        },
+        REFRESH_SECRET,
+    );
+
+    const access: string = await sign(
+        {
+            ...payload,
+            exp: access_exp,
+        },
+        ACCESS_SECRET,
+    );
+
+    return {
+        id: user._id.toString(),
+        name: user.name,
+        refresh,
+        access,
+    };
 };
 
 export type { ServiceUserLoginOptions, ServiceUserLoginResult, ServiceError };

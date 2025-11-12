@@ -9,12 +9,10 @@ import { ServiceError } from "#/utils/service-error";
 
 enum ServiceUserRenewAccessErrorCode {
     INVALID = "invalid",
-    UNKNOWN = "unknown",
 }
 
 enum ServiceUserRenewAccessErrorMessage {
     INVALID = "Invalid access token",
-    UNKNOWN = "Unknown error",
 }
 
 const getLoginErrorMessage = (
@@ -23,8 +21,6 @@ const getLoginErrorMessage = (
     switch (code) {
         case ServiceUserRenewAccessErrorCode.INVALID:
             return ServiceUserRenewAccessErrorMessage.INVALID;
-        case ServiceUserRenewAccessErrorCode.UNKNOWN:
-            return ServiceUserRenewAccessErrorMessage.UNKNOWN;
     }
 };
 
@@ -39,43 +35,36 @@ type ServiceUserRenewAccessResult = {
 const serviceUserRenewAccess = async (
     options: ServiceUserRenewAccessOptions,
 ): Promise<ServiceUserRenewAccessResult> => {
-    try {
-        const payload: AccessTokenPayload | undefined = await verifyAccessToken(
-            options.access,
-        );
+    const payload: AccessTokenPayload | undefined = await verifyAccessToken(
+        options.access,
+    );
 
-        if (!payload) {
-            const code: ServiceUserRenewAccessErrorCode =
-                ServiceUserRenewAccessErrorCode.INVALID;
-
-            throw new ServiceError(code)
-                .setStatus(401)
-                .setMessage(getLoginErrorMessage(code));
-        }
-
-        const newPayload = {
-            id: payload.id,
-            name: payload.name,
-            iat: Date.now(),
-        } as const;
-
-        const access: string = await sign(
-            {
-                ...newPayload,
-                exp: access_exp,
-            },
-            ACCESS_SECRET,
-        );
-
-        return {
-            access,
-        };
-    } catch (_: unknown) {
+    if (!payload) {
         const code: ServiceUserRenewAccessErrorCode =
-            ServiceUserRenewAccessErrorCode.UNKNOWN;
+            ServiceUserRenewAccessErrorCode.INVALID;
 
-        throw new ServiceError(code).setMessage(getLoginErrorMessage(code));
+        throw new ServiceError(code)
+            .setStatus(401)
+            .setMessage(getLoginErrorMessage(code));
     }
+
+    const newPayload = {
+        id: payload.id,
+        name: payload.name,
+        iat: Date.now(),
+    } as const;
+
+    const access: string = await sign(
+        {
+            ...newPayload,
+            exp: access_exp,
+        },
+        ACCESS_SECRET,
+    );
+
+    return {
+        access,
+    };
 };
 
 export type { ServiceUserRenewAccessOptions, ServiceUserRenewAccessResult };

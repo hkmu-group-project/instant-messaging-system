@@ -35,7 +35,11 @@ import {
     ServiceUserRenewRefreshErrorMessage,
     serviceUserRenewRefresh,
 } from "#/modules/user/services/auth/renew/refresh";
-import { routerErrorHandler } from "#/utils/service-error";
+import {
+    routerErrorHandler,
+    SERVICE_ERROR_UNKNOWN_CODE,
+    SERVICE_ERROR_UNKNOWN_MESSAGE,
+} from "#/utils/service-error";
 
 const router: Hono = new Hono();
 
@@ -84,12 +88,8 @@ router.post(
                         schema: resolver(
                             createJsonFailureResponseSchema(
                                 createJsonResponseErrorSchema(
-                                    z.literal(
-                                        ServiceUserRegisterErrorCode.UNKNOWN,
-                                    ),
-                                    z.literal(
-                                        ServiceUserRegisterErrorMessage.UNKNOWN,
-                                    ),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_CODE),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_MESSAGE),
                                 ),
                             ),
                         ),
@@ -163,12 +163,8 @@ router.post(
                         schema: resolver(
                             createJsonFailureResponseSchema(
                                 createJsonResponseErrorSchema(
-                                    z.literal(
-                                        ServiceUserLoginErrorCode.UNKNOWN,
-                                    ),
-                                    z.literal(
-                                        ServiceUserLoginErrorMessage.UNKNOWN,
-                                    ),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_CODE),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_MESSAGE),
                                 ),
                             ),
                         ),
@@ -255,12 +251,8 @@ router.post(
                         schema: resolver(
                             createJsonFailureResponseSchema(
                                 createJsonResponseErrorSchema(
-                                    z.literal(
-                                        ServiceUserRenewRefreshErrorCode.UNKNOWN,
-                                    ),
-                                    z.literal(
-                                        ServiceUserRenewRefreshErrorMessage.UNKNOWN,
-                                    ),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_CODE),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_MESSAGE),
                                 ),
                             ),
                         ),
@@ -343,12 +335,8 @@ router.post(
                         schema: resolver(
                             createJsonFailureResponseSchema(
                                 createJsonResponseErrorSchema(
-                                    z.literal(
-                                        ServiceUserRenewAccessErrorCode.UNKNOWN,
-                                    ),
-                                    z.literal(
-                                        ServiceUserRenewAccessErrorMessage.UNKNOWN,
-                                    ),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_CODE),
+                                    z.literal(SERVICE_ERROR_UNKNOWN_MESSAGE),
                                 ),
                             ),
                         ),
