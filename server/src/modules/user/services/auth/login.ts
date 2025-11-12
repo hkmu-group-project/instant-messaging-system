@@ -63,7 +63,9 @@ const serviceUserLogin = async (
             const code: ServiceUserLoginErrorCode =
                 ServiceUserLoginErrorCode.INVALID;
 
-            throw new ServiceError(code).setMessage(getLoginErrorMessage(code));
+            throw new ServiceError(code)
+                .setStatus(401)
+                .setMessage(getLoginErrorMessage(code));
         }
 
         // create token

@@ -33,7 +33,7 @@ const getRegisterErrorMessage = (
 
 const serviceUserRegister = async (
     options: ServiceUserRegisterOptions,
-): Promise<true> => {
+): Promise<void> => {
     try {
         // check duplicate
 
@@ -45,9 +45,9 @@ const serviceUserRegister = async (
             const code: ServiceUserRegisterErrorCode =
                 ServiceUserRegisterErrorCode.DUPLICATE;
 
-            throw new ServiceError(code).setMessage(
-                getRegisterErrorMessage(code),
-            );
+            throw new ServiceError(code)
+                .setStatus(409)
+                .setMessage(getRegisterErrorMessage(code));
         }
 
         // hash user password
@@ -60,8 +60,6 @@ const serviceUserRegister = async (
             name: options.name,
             password: hashed,
         });
-
-        return true;
     } catch (_: unknown) {
         const code: ServiceUserRegisterErrorCode =
             ServiceUserRegisterErrorCode.UNKNOWN;

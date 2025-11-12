@@ -14,6 +14,7 @@ import {
     jsonResponseSchema,
 } from "#/@types/zod";
 import { healthInfoSchema } from "#/modules/health/service";
+import { routerAuth } from "#/router/auth";
 import { healthHandler } from "#/router/health";
 import { routerUser } from "#/router/user";
 
@@ -58,6 +59,8 @@ router.get(
         return await healthHandler(c.req.raw);
     },
 );
+
+router.route("/auth", routerAuth);
 
 router.route("/user", routerUser);
 
