@@ -62,14 +62,13 @@ const findRoomByID = async (_id: ObjectId): Promise<WithId<Room> | null> => {
     });
 };
 
-type CreateRoomData = Format<
-    Partial<Pick<Room, "name" | "description">, "description">
->;
+type CreateRoomData = Format<Pick<Room, "ownerId" | "name" | "description">>;
 
 const createRoom = async (
     data: CreateRoomData,
 ): Promise<InsertOneResult<Room>> => {
     return await room.insertOne({
+        ownerId: data.ownerId,
         name: data.name,
         description: data.description,
         createdAt: new Date(),
@@ -102,5 +101,5 @@ const deleteRoom = async (id: ObjectId): Promise<DeleteResult> => {
     });
 };
 
-export type { CreateRoomData, UpdateRoomData };
+export type { FindRoomsOptions, CreateRoomData, UpdateRoomData };
 export { findRooms, findRoomByID, createRoom, updateRoom, deleteRoom };

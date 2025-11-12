@@ -1,10 +1,11 @@
-import type { Collection } from "mongodb";
+import type { Collection, ObjectId } from "mongodb";
 
 import { db } from "#/configs/database";
 
 const COLLECTION_NAME: string = "room" as const;
 
 type Room = {
+    ownerId: ObjectId;
     name: string;
     description?: string;
     createdAt: Date;
