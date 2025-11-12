@@ -4,18 +4,25 @@ import type { ProtectedUser } from "#/modules/user/schema";
 import { createJsonResponse } from "@jderstd/hono/response";
 import { describeRoute, resolver, validator } from "@jderstd/hono-openapi";
 import { Hono } from "hono";
+import { getCookie } from "hono/cookie";
 import z from "zod";
 
 import {
     createJsonFailureResponseSchema,
     createJsonResponseErrorSchema,
     createJsonSuccessResponseSchema,
+    jsonResponseSchema,
 } from "#/@types/zod";
 import {
     ServiceUserFindErrorCode,
     ServiceUserFindErrorMessage,
     serviceUserFind,
 } from "#/modules/user/services/find";
+import {
+    ServiceUserUpdateErrorCode,
+    ServiceUserUpdateErrorMessage,
+    serviceUserUpdate,
+} from "#/modules/user/services/update";
 import { routerErrorHandler } from "#/utils/service-error";
 
 const router: Hono = new Hono();
@@ -117,6 +124,102 @@ router.get(
             return createJsonResponse({
                 data: user,
             });
+        } catch (err: unknown) {
+            return routerErrorHandler(err);
+        }
+    },
+);
+
+const updateUserJson = z.object({
+    access: z.optional(z.string()),
+    id: z.string(),
+    name: z.optional(z.string()),
+    password: z.optional(z.string()),
+});
+
+router.post(
+    "/",
+    validator("json", updateUserJson),
+    describeRoute({
+        operationId: "updateUser",
+        responses: {
+            200: {
+                description: "Successful response",
+                content: {
+                    "application/json": {
+                        schema: resolver(jsonResponseSchema),
+                    },
+                },
+            },
+            400: {
+                description: "Missing JSON payload",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonFailureResponseSchema(
+                                createJsonResponseErrorSchema(
+                                    z.literal("parse"),
+                                    z.string(),
+                                ),
+                            ),
+                        ),
+                    },
+                },
+            },
+            404: {
+                description: "User not found",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonFailureResponseSchema(
+                                createJsonResponseErrorSchema(
+                                    z.literal(
+                                        ServiceUserUpdateErrorCode.NOT_FOUND,
+                                    ),
+                                    z.literal(
+                                        ServiceUserUpdateErrorMessage.NOT_FOUND,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    },
+                },
+            },
+            500: {
+                description: "Unknown error",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonFailureResponseSchema(
+                                createJsonResponseErrorSchema(
+                                    z.literal(
+                                        ServiceUserUpdateErrorCode.UNKNOWN,
+                                    ),
+                                    z.literal(
+                                        ServiceUserUpdateErrorMessage.UNKNOWN,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    },
+                },
+            },
+        },
+    }),
+    async (c): Promise<Response> => {
+        try {
+            const { access: acs, id, name, password } = c.req.valid("json");
+
+            const access: string | undefined = getCookie(c, "access") ?? acs;
+
+            await serviceUserUpdate({
+                access,
+                id,
+                name,
+                password,
+            });
+
+            return createJsonResponse(c);
         } catch (err: unknown) {
             return routerErrorHandler(err);
         }

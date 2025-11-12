@@ -4,7 +4,7 @@ import type { Format } from "ts-vista";
 import type { User } from "#/modules/user/schema";
 
 import { verify } from "@node-rs/argon2";
-import { SignJWT } from "jose";
+import { sign } from "hono/jwt";
 
 import { ACCESS_SECRET, REFRESH_SECRET } from "#/constants";
 import { findUserByName } from "#/modules/user/sql";
@@ -71,25 +71,24 @@ const serviceUserLogin = async (
         const payload = {
             id: user._id.toString(),
             name: user.name,
+            iat: Date.now(),
         } as const;
 
-        const alg: string = "HS256";
+        const refresh: string = await sign(
+            {
+                ...payload,
+                exp: Date.now() + 1000 * 60 * 60 * 24 * 365,
+            },
+            REFRESH_SECRET,
+        );
 
-        const refresh: string = await new SignJWT(payload)
-            .setProtectedHeader({
-                alg,
-            })
-            .setIssuedAt()
-            .setExpirationTime("1y")
-            .sign(new TextEncoder().encode(REFRESH_SECRET));
-
-        const access: string = await new SignJWT(payload)
-            .setProtectedHeader({
-                alg,
-            })
-            .setIssuedAt()
-            .setExpirationTime("15m")
-            .sign(new TextEncoder().encode(ACCESS_SECRET));
+        const access: string = await sign(
+            {
+                ...payload,
+                exp: Date.now() + 1000 * 60 * 15,
+            },
+            ACCESS_SECRET,
+        );
 
         return {
             id: user._id.toString(),
