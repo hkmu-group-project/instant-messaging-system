@@ -9,12 +9,12 @@ type RefreshTokenPayload = {
     exp: number;
 };
 
-const verifyRefreshToken = async (access: string | undefined) => {
+const verifyRefreshToken = async (refresh: string | undefined) => {
     try {
-        if (!access) return void 0;
+        if (!refresh) return void 0;
 
         const result: RefreshTokenPayload = (await verify(
-            access,
+            refresh,
             REFRESH_SECRET,
         )) as RefreshTokenPayload;
 

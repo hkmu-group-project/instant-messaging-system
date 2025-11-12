@@ -1,6 +1,11 @@
+import type { ServiceUserLoginResult } from "#/modules/user/services/auth/login";
+import type { ServiceUserRenewAccessResult } from "#/modules/user/services/auth/renew/access";
+import type { ServiceUserRenewRefreshResult } from "#/modules/user/services/auth/renew/refresh";
+
 import { createJsonResponse } from "@jderstd/hono/response";
 import { describeRoute, resolver, validator } from "@jderstd/hono-openapi";
 import { Hono } from "hono";
+import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { z } from "zod";
 
 import {
@@ -9,10 +14,10 @@ import {
     createJsonSuccessResponseSchema,
     jsonResponseSchema,
 } from "#/@types/zod";
+import { access_exp, refresh_exp } from "#/configs/token";
 import {
     ServiceUserLoginErrorCode,
     ServiceUserLoginErrorMessage,
-    type ServiceUserLoginResult,
     serviceUserLogin,
 } from "#/modules/user/services/auth/login";
 import {
@@ -20,6 +25,16 @@ import {
     ServiceUserRegisterErrorMessage,
     serviceUserRegister,
 } from "#/modules/user/services/auth/register";
+import {
+    ServiceUserRenewAccessErrorCode,
+    ServiceUserRenewAccessErrorMessage,
+    serviceUserRenewAccess,
+} from "#/modules/user/services/auth/renew/access";
+import {
+    ServiceUserRenewRefreshErrorCode,
+    ServiceUserRenewRefreshErrorMessage,
+    serviceUserRenewRefresh,
+} from "#/modules/user/services/auth/renew/refresh";
 import { routerErrorHandler } from "#/utils/service-error";
 
 const router: Hono = new Hono();
@@ -152,7 +167,7 @@ router.post(
                                         ServiceUserLoginErrorCode.UNKNOWN,
                                     ),
                                     z.literal(
-                                        ServiceUserLoginErrorCode.UNKNOWN,
+                                        ServiceUserLoginErrorMessage.UNKNOWN,
                                     ),
                                 ),
                             ),
@@ -171,6 +186,16 @@ router.post(
                 password,
             });
 
+            setCookie(c, "refresh", data.refresh, {
+                expires: new Date(refresh_exp),
+                httpOnly: true,
+            });
+
+            setCookie(c, "access", data.access, {
+                expires: new Date(access_exp),
+                httpOnly: true,
+            });
+
             return createJsonResponse<ServiceUserLoginResult>(c, {
                 data,
             });
@@ -179,5 +204,191 @@ router.post(
         }
     },
 );
+
+const refreshJson = z.object({
+    refresh: z.optional(z.string()),
+});
+
+const refreshDataJson = z.object({
+    refresh: z.string(),
+});
+
+router.post(
+    "/renew/refresh",
+    validator("json", refreshJson),
+    describeRoute({
+        operationId: "renewRefresh",
+        responses: {
+            200: {
+                description: "Successful response",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonSuccessResponseSchema(refreshDataJson),
+                        ),
+                    },
+                },
+            },
+            401: {
+                description: "Invalid token",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonFailureResponseSchema(
+                                createJsonResponseErrorSchema(
+                                    z.literal(
+                                        ServiceUserRenewRefreshErrorCode.INVALID,
+                                    ),
+                                    z.literal(
+                                        ServiceUserRenewRefreshErrorMessage.INVALID,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    },
+                },
+            },
+            500: {
+                description: "Unknown error",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonFailureResponseSchema(
+                                createJsonResponseErrorSchema(
+                                    z.literal(
+                                        ServiceUserRenewRefreshErrorCode.UNKNOWN,
+                                    ),
+                                    z.literal(
+                                        ServiceUserRenewRefreshErrorMessage.UNKNOWN,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    },
+                },
+            },
+        },
+    }),
+    async (c): Promise<Response> => {
+        try {
+            const { refresh: rfh } = c.req.valid("json");
+            const refresh: string | undefined = getCookie(c, "refresh") ?? rfh;
+
+            const data: ServiceUserRenewRefreshResult =
+                await serviceUserRenewRefresh({
+                    refresh,
+                });
+
+            setCookie(c, "refresh", data.refresh, {
+                expires: new Date(refresh_exp),
+                httpOnly: true,
+            });
+
+            return createJsonResponse<ServiceUserRenewRefreshResult>(c, {
+                data,
+            });
+        } catch (err: unknown) {
+            return routerErrorHandler(err);
+        }
+    },
+);
+
+const accessJson = z.object({
+    access: z.optional(z.string()),
+});
+
+const accessDataJson = z.object({
+    access: z.optional(z.string()),
+});
+
+router.post(
+    "/renew/access",
+    validator("json", accessJson),
+    describeRoute({
+        operationId: "renewRefresh",
+        responses: {
+            200: {
+                description: "Successful response",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonSuccessResponseSchema(accessDataJson),
+                        ),
+                    },
+                },
+            },
+            401: {
+                description: "Invalid token",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonFailureResponseSchema(
+                                createJsonResponseErrorSchema(
+                                    z.literal(
+                                        ServiceUserRenewAccessErrorCode.INVALID,
+                                    ),
+                                    z.literal(
+                                        ServiceUserRenewAccessErrorMessage.INVALID,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    },
+                },
+            },
+            500: {
+                description: "Unknown error",
+                content: {
+                    "application/json": {
+                        schema: resolver(
+                            createJsonFailureResponseSchema(
+                                createJsonResponseErrorSchema(
+                                    z.literal(
+                                        ServiceUserRenewAccessErrorCode.UNKNOWN,
+                                    ),
+                                    z.literal(
+                                        ServiceUserRenewAccessErrorMessage.UNKNOWN,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    },
+                },
+            },
+        },
+    }),
+    async (c): Promise<Response> => {
+        try {
+            const { access: acs } = c.req.valid("json");
+            const access: string | undefined = getCookie(c, "access") ?? acs;
+
+            const data: ServiceUserRenewAccessResult =
+                await serviceUserRenewAccess({
+                    access,
+                });
+
+            setCookie(c, "access", data.access, {
+                expires: new Date(access_exp),
+                httpOnly: true,
+            });
+
+            return createJsonResponse<ServiceUserRenewAccessResult>(c, {
+                data,
+            });
+        } catch (err: unknown) {
+            return routerErrorHandler(err);
+        }
+    },
+);
+
+router.post("/logout", async (c): Promise<Response> => {
+    try {
+        deleteCookie(c, "refresh");
+        deleteCookie(c, "access");
+        return createJsonResponse(c);
+    } catch (err: unknown) {
+        return routerErrorHandler(err);
+    }
+});
 
 export { router as routerAuth };

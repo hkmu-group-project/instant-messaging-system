@@ -6,6 +6,7 @@ import type { User } from "#/modules/user/schema";
 import { verify } from "@node-rs/argon2";
 import { sign } from "hono/jwt";
 
+import { access_exp, refresh_exp } from "#/configs/token";
 import { ACCESS_SECRET, REFRESH_SECRET } from "#/constants";
 import { findUserByName } from "#/modules/user/sql";
 import { ServiceError } from "#/utils/service-error";
@@ -79,7 +80,7 @@ const serviceUserLogin = async (
         const refresh: string = await sign(
             {
                 ...payload,
-                exp: Date.now() + 1000 * 60 * 60 * 24 * 365,
+                exp: refresh_exp,
             },
             REFRESH_SECRET,
         );
@@ -87,7 +88,7 @@ const serviceUserLogin = async (
         const access: string = await sign(
             {
                 ...payload,
-                exp: Date.now() + 1000 * 60 * 15,
+                exp: access_exp,
             },
             ACCESS_SECRET,
         );
