@@ -6,7 +6,7 @@ const COLLECTION_NAME: string = "message" as const;
 
 type Message = {
     roomId: ObjectId;
-    sender: string;
+    sender: ObjectId;
     content: string;
     createdAt: Date;
     updatedAt: Date;
