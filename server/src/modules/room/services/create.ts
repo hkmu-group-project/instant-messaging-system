@@ -1,4 +1,6 @@
-import { ObjectId } from "mongodb";
+import type { Room } from "../schema";
+
+import { type InsertOneResult, ObjectId } from "mongodb";
 
 import {
     type AccessTokenPayload,
@@ -32,7 +34,7 @@ type ServiceRoomCreateOptions = {
 
 const serviceRoomCreate = async (
     options: ServiceRoomCreateOptions,
-): Promise<void> => {
+): Promise<InsertOneResult<Room>> => {
     const payload: AccessTokenPayload | undefined = await verifyAccessToken(
         options.access,
     );
@@ -46,7 +48,7 @@ const serviceRoomCreate = async (
             .setMessage(getErrorMessage(code));
     }
 
-    await createRoom({
+    return await createRoom({
         ownerId: new ObjectId(payload.id),
         name: options.name,
         description: options.description,

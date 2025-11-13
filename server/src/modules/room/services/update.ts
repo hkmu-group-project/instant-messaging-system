@@ -1,6 +1,7 @@
 import type { AccessTokenPayload } from "#/utils/jwt-verify/access";
+import type { Room } from "../schema";
 
-import { ObjectId } from "mongodb";
+import { ObjectId, type UpdateResult } from "mongodb";
 
 import { updateRoom } from "#/modules/room/sql";
 import { verifyAccessToken } from "#/utils/jwt-verify/access";
@@ -32,7 +33,7 @@ type ServiceRoomUpdateOptions = {
 
 const serviceRoomUpdate = async (
     options: ServiceRoomUpdateOptions,
-): Promise<void> => {
+): Promise<UpdateResult<Room>> => {
     const payload: AccessTokenPayload | undefined = await verifyAccessToken(
         options.access,
     );
@@ -46,7 +47,7 @@ const serviceRoomUpdate = async (
             .setMessage(getErrorMessage(code));
     }
 
-    await updateRoom(new ObjectId(options.id), {
+    return await updateRoom(new ObjectId(options.id), {
         name: options.name,
         description: options.description,
     });

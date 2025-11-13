@@ -1,4 +1,12 @@
+import { ObjectId } from "mongodb";
 import { z } from "zod";
+
+const objectIdSchema = z
+    .string()
+    .regex(/^[0-9a-fA-F]{24}$/, {
+        message: "Invalid ObjectId",
+    })
+    .transform((val) => new ObjectId(val));
 
 const jsonResponseSchema = z.object({
     success: z.boolean(),
@@ -27,6 +35,7 @@ const createJsonFailureResponseSchema = (error: z.ZodType) => {
 };
 
 export {
+    objectIdSchema,
     jsonResponseSchema,
     createJsonSuccessResponseSchema,
     createJsonResponseErrorSchema,
