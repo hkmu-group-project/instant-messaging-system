@@ -22,6 +22,9 @@
             ],
             "#/app/*": [
                 "./.react-router/types/src/app/*"
+            ],
+            "#/openapi": [
+                "./.openapi/index"
             ]
         }
     },

@@ -4,6 +4,7 @@ set windows-shell := ["powershell"]
 node_bin := "./node_modules/.bin/"
 tsc := node_bin + "tsc"
 biome := node_bin + "biome"
+openapi := node_bin + "openapi-ts"
 react_router := node_bin + "react-router"
 react_serve := node_bin + "react-router-serve"
 vite := node_bin + "vite"
@@ -20,9 +21,26 @@ _:
 i:
     pnpm install
 
+# Typegen
+typegen:
+    cd ./{{cli}} && ./{{react_router}} typegen
+
+# OpenAPI gen
+gen:
+    cd ./{{cli}} && ./{{openapi}} \
+    -i http://localhost:4001/openapi.json \
+    -o ./.openapi
+
+# OpenAPI gen
+gen-prd:
+    cd ./{{cli}} && ./{{openapi}} \
+    -i https://example.com/openapi.json \
+    -o ./.openapi
+
 # Lint client with TypeScript Compiler
 tsc-cli:
-    cd ./{{cli}} && ./{{react_router}} typegen && ../{{tsc}} --noEmit
+    just typegen
+    cd ./{{cli}} && ../{{tsc}} --noEmit
 
 # Lint server with TypeScript Compiler
 tsc-srv:
