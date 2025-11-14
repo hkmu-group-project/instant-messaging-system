@@ -1,5 +1,4 @@
-import type * as React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function Index() {
     return (
@@ -7,22 +6,19 @@ export default function Index() {
             height: '100vh', 
             display: 'flex', 
             flexDirection: 'column',
-            backgroundColor: '#f5f5f5'
+            backgroundColor: 'EBE5E5'
         }}>
             {/* 頂部導航欄 */}
             <div style={{
-                backgroundColor: '#2c3e50',
-                color: 'white',
+                backgroundColor: 'E8E8E8',
+                color: 'FFFFFF',
                 padding: '1rem 2rem',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
             }}>
-                <h1 style={{ margin: 0, fontSize: '1.5rem' }}>💬 Chat System</h1>
-                <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>
-                    Secure Messaging Platform
-                </div>
+                <h1 style={{ margin: 0, fontSize: '1.5rem', color: 'FFFFFF', fontFamily: "'Segoe UI', sans-serif", fontWeight: '300' }}>💬 Chat System</h1>
             </div>
 
             {/* 主內容 - 介紹頁面 */}
@@ -64,8 +60,8 @@ export default function Index() {
                         minWidth: '200px'
                     }}>
                         <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔒</div>
-                        <h3>Secure</h3>
-                        <p style={{ color: '#666' }}>End-to-end encryption</p>
+                        <h3 style={{fontFamily: "'Segoe UI', sans-serif"}}>Secure</h3>
+                        <p style={{ color: '#666', fontFamily:"'Andale Mono', monospace" }}>End-to-end encryption</p>
                     </div>
                     <div style={{
                         backgroundColor: 'white',
@@ -75,8 +71,8 @@ export default function Index() {
                         minWidth: '200px'
                     }}>
                         <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⚡</div>
-                        <h3>Fast</h3>
-                        <p style={{ color: '#666' }}>Real-time messaging</p>
+                        <h3 style={{fontFamily: "'Segoe UI', sans-serif"}}>Fast</h3>
+                        <p style={{ color: '#666', fontFamily:"'Andale Mono', monospace" }}>Real-time messaging</p>
                     </div>
                     <div style={{
                         backgroundColor: 'white',
@@ -86,8 +82,8 @@ export default function Index() {
                         minWidth: '200px'
                     }}>
                         <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🎯</div>
-                        <h3>Easy</h3>
-                        <p style={{ color: '#666' }}>User-friendly interface</p>
+                        <h3 style={{fontFamily: "'Segoe UI', sans-serif"}}>Easy</h3>
+                        <p style={{ color: '#666', fontFamily:"'Andale Mono', monospace" }}>User-friendly interface</p>
                     </div>
                 </div>
 
