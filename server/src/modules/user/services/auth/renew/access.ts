@@ -1,10 +1,10 @@
-import type { AccessTokenPayload } from "#/utils/jwt-verify/access";
+import type { RefreshTokenPayload } from "#/utils/jwt-verify/refresh";
 
 import { sign } from "hono/jwt";
 
 import { access_exp } from "#/configs/token";
 import { ACCESS_SECRET } from "#/constants";
-import { verifyAccessToken } from "#/utils/jwt-verify/access";
+import { verifyRefreshToken } from "#/utils/jwt-verify/refresh";
 import { ServiceError } from "#/utils/service-error";
 
 enum ServiceUserRenewAccessErrorCode {
@@ -25,18 +25,20 @@ const getLoginErrorMessage = (
 };
 
 type ServiceUserRenewAccessOptions = {
-    access?: string;
+    refresh?: string;
 };
 
 type ServiceUserRenewAccessResult = {
+    id: string;
+    name: string;
     access: string;
 };
 
 const serviceUserRenewAccess = async (
     options: ServiceUserRenewAccessOptions,
 ): Promise<ServiceUserRenewAccessResult> => {
-    const payload: AccessTokenPayload | undefined = await verifyAccessToken(
-        options.access,
+    const payload: RefreshTokenPayload | undefined = await verifyRefreshToken(
+        options.refresh,
     );
 
     if (!payload) {
@@ -63,6 +65,8 @@ const serviceUserRenewAccess = async (
     );
 
     return {
+        id: payload.id,
+        name: payload.name,
         access,
     };
 };

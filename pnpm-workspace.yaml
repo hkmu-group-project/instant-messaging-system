@@ -2,14 +2,11 @@ packages:
     - ./client
     - ./server
 
-catalogs:
-    dep:
-        vite: ^7.1.11
-        "vite-tsconfig-paths": ^5.1.4
-
 minimumReleaseAge: 1440
 
 minimumReleaseAgeExclude:
     - "@apst/biome"
     - "@apst/tsconfig"
     - "@jderstd/express"
+    - "@jderstd/hono"
+    - "@jderstd/hono-openapi"

@@ -206,7 +206,10 @@ const refreshJson = z.object({
 });
 
 const refreshDataJson = z.object({
+    id: z.string(),
+    name: z.string(),
     refresh: z.string(),
+    access: z.string(),
 });
 
 router.post(
@@ -276,6 +279,11 @@ router.post(
                 httpOnly: true,
             });
 
+            setCookie(c, "access", data.access, {
+                expires: new Date(access_exp),
+                httpOnly: true,
+            });
+
             return createJsonResponse<ServiceUserRenewRefreshResult>(c, {
                 data,
             });
@@ -286,18 +294,20 @@ router.post(
 );
 
 const accessJson = z.object({
-    access: z.optional(z.string()),
+    refresh: z.optional(z.string()),
 });
 
 const accessDataJson = z.object({
-    access: z.optional(z.string()),
+    id: z.string(),
+    name: z.string(),
+    access: z.string(),
 });
 
 router.post(
     "/renew/access",
     validator("json", accessJson),
     describeRoute({
-        operationId: "renewRefresh",
+        operationId: "renewAccess",
         responses: {
             200: {
                 description: "Successful response",
@@ -347,15 +357,15 @@ router.post(
     }),
     async (c): Promise<Response> => {
         try {
-            const { access: acs } = c.req.valid("json");
-            const access: string | undefined = getCookie(c, "access") ?? acs;
+            const { refresh: rfh } = c.req.valid("json");
+            const refresh: string | undefined = getCookie(c, "refresh") ?? rfh;
 
             const data: ServiceUserRenewAccessResult =
                 await serviceUserRenewAccess({
-                    access,
+                    refresh,
                 });
 
-            setCookie(c, "access", data.access, {
+            setCookie(c, "refresh", data.access, {
                 expires: new Date(access_exp),
                 httpOnly: true,
             });

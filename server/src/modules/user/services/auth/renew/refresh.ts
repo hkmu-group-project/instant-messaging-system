@@ -2,8 +2,8 @@ import type { RefreshTokenPayload } from "#/utils/jwt-verify/refresh";
 
 import { sign } from "hono/jwt";
 
-import { refresh_exp } from "#/configs/token";
-import { REFRESH_SECRET } from "#/constants";
+import { access_exp, refresh_exp } from "#/configs/token";
+import { ACCESS_SECRET, REFRESH_SECRET } from "#/constants";
 import { verifyRefreshToken } from "#/utils/jwt-verify/refresh";
 import { ServiceError } from "#/utils/service-error";
 
@@ -29,7 +29,10 @@ type ServiceUserRenewRefreshOptions = {
 };
 
 type ServiceUserRenewRefreshResult = {
+    id: string;
+    name: string;
     refresh: string;
+    access: string;
 };
 
 const serviceUserRenewRefresh = async (
@@ -62,8 +65,19 @@ const serviceUserRenewRefresh = async (
         REFRESH_SECRET,
     );
 
+    const access: string = await sign(
+        {
+            ...newPayload,
+            exp: access_exp,
+        },
+        ACCESS_SECRET,
+    );
+
     return {
+        id: payload.id,
+        name: payload.name,
         refresh,
+        access,
     };
 };
 

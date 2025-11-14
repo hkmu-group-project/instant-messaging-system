@@ -1,5 +1,6 @@
 # OpenAPI
 /.openapi/
 
-# React Router
-/.react-router/
+# Next
+/.next/
+/next-env.d.ts

@@ -5,8 +5,7 @@ node_bin := "./node_modules/.bin/"
 tsc := node_bin + "tsc"
 biome := node_bin + "biome"
 openapi := node_bin + "openapi-ts"
-react_router := node_bin + "react-router"
-react_serve := node_bin + "react-router-serve"
+next := node_bin + "next"
 vite := node_bin + "vite"
 
 cli := "client"
@@ -23,7 +22,7 @@ i:
 
 # Typegen
 typegen:
-    cd ./{{cli}} && ./{{react_router}} typegen
+    cd ./{{cli}} && ./{{next}} typegen
 
 # OpenAPI gen
 gen:
@@ -69,15 +68,15 @@ fmt:
 
 # Start client in development
 dev-cli:
-    cd ./{{cli}} && ./{{react_router}} dev
+    cd ./{{cli}} && ./{{next}} dev -p 3001
 
 # Build client
 build-cli:
-    cd ./{{cli}} && ./{{react_router}} build
+    cd ./{{cli}} && ./{{next}} build
 
 # Start client in production (Require build first)
 start-cli:
-    cd ./{{cli}} && ./{{react_serve}} ./dist/server/index.js
+    cd ./{{cli}} && ./{{next}} start -p 3000
 
 # Start server in development
 dev-srv:

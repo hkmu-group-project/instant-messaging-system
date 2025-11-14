@@ -20,7 +20,7 @@
         "@hono/vite-dev-server": "~0.23.0",
         "@types/express": "^5.0.3",
         "quansync": "~0.2.11",
-        "vite": "catalog:dep",
-        "vite-tsconfig-paths": "catalog:dep"
+        "vite": "^7.2.0",
+        "vite-tsconfig-paths": "^5.1.4"
     }
 }

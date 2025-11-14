@@ -1,22 +1,18 @@
 {
     "private": true,
-    "type": "module",
     "dependencies": {
-        "@remix-run/node-fetch-server": "0.9.0",
+        "next": "^16.0.3",
         "react": "19.2.0",
         "react-dom": "19.2.0",
-        "react-router": "7.9.4"
+        "zustand": "^5.0.8"
     },
     "devDependencies": {
         "@hey-api/openapi-ts": "~0.87.4",
-        "@react-router/dev": "7.9.4",
-        "@react-router/fs-routes": "7.9.4",
-        "@react-router/serve": "^7.9.4",
+        "@svgr/webpack": "^8.1.0",
+        "@types/node": "^24.10.1",
         "@types/react": "~19.2.0",
         "@types/react-dom": "~19.2.0",
-        "@vitejs/plugin-rsc": "~0.4.31",
-        "vite": "catalog:dep",
-        "vite-plugin-devtools-json": "^1.0.0",
-        "vite-tsconfig-paths": "catalog:dep"
+        "babel-plugin-react-compiler": "^1.0.0",
+        "sharp": "~0.34.5"
     }
 }
