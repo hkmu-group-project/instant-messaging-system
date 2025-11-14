@@ -1,6 +1,7 @@
+import type { Message } from "#/modules/message/schema";
 import type { AccessTokenPayload } from "#/utils/jwt-verify/access";
 
-import { ObjectId } from "mongodb";
+import { type InsertOneResult, ObjectId } from "mongodb";
 
 import { createMessage } from "#/modules/message/sql";
 import { verifyAccessToken } from "#/utils/jwt-verify/access";
@@ -31,7 +32,7 @@ type ServiceMessageCreateOptions = {
 
 const serviceMessageCreate = async (
     options: ServiceMessageCreateOptions,
-): Promise<void> => {
+): Promise<InsertOneResult<Message>> => {
     const payload: AccessTokenPayload | undefined = await verifyAccessToken(
         options.access,
     );
@@ -45,7 +46,7 @@ const serviceMessageCreate = async (
             .setMessage(getErrorMessage(code));
     }
 
-    await createMessage({
+    return await createMessage({
         roomId: new ObjectId(options.roomId),
         sender: new ObjectId(payload.id),
         content: options.content,

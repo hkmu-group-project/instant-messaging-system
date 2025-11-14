@@ -3,6 +3,7 @@ import { z } from "zod";
 
 const objectIdSchema = z
     .string()
+    .describe("ObjectId")
     .regex(/^[0-9a-fA-F]{24}$/, {
         message: "Invalid ObjectId",
     })

@@ -16,8 +16,9 @@ import {
 import { healthInfoSchema } from "#/modules/health/service";
 import { routerAuth } from "#/router/auth";
 import { healthHandler } from "#/router/health";
+import { routerMessage } from "#/router/message";
+import { routerRoom } from "#/router/room";
 import { routerUser } from "#/router/user";
-import { routerRoom } from "./room";
 
 const router: Hono = new Hono();
 
@@ -66,6 +67,8 @@ router.route("/auth", routerAuth);
 router.route("/users", routerUser);
 
 router.route("/rooms", routerRoom);
+
+router.route("/messages", routerMessage);
 
 router.get(
     "/openapi.json",

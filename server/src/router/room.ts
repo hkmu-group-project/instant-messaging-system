@@ -45,18 +45,26 @@ import {
 
 const router: Hono = new Hono();
 
-const findAllRoomsQuery = z.union([
-    z.object({
-        after: z.optional(objectIdSchema),
-        first: z.optional(z.coerce.number()),
-    }),
-    z.object({
-        before: z.optional(objectIdSchema),
-        last: z.optional(z.coerce.number()),
-    }),
-]);
+// const findAllRoomsQuery = z.union([
+//     z.object({
+//         after: z.optional(objectIdSchema),
+//         first: z.optional(z.coerce.number()),
+//     }),
+//     z.object({
+//         before: z.optional(objectIdSchema),
+//         last: z.optional(z.coerce.number()),
+//     }),
+// ]);
+
+const findAllRoomsQuery = z.object({
+    after: z.optional(objectIdSchema),
+    first: z.optional(z.coerce.number()),
+    before: z.optional(objectIdSchema),
+    last: z.optional(z.coerce.number()),
+});
 
 const roomSchema = z.object({
+    id: objectIdSchema,
     ownerId: objectIdSchema,
     name: z.string(),
     description: z.optional(z.string()),
@@ -118,6 +126,7 @@ router.get(
         try {
             const query = req.valid("query");
 
+            // @ts-expect-error
             const data: WithStringId<Room>[] = await serviceRoomFindAll(query);
 
             return createJsonResponse<WithStringId<Room>[]>({
