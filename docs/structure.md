@@ -11,9 +11,8 @@ The project structure is as follows:
 │   ├── src/: source code
 │   ├── .gitignore: git ignore
 │   ├── package.json: dependencies for the project
-│   ├── react-router.config.ts: React Router configuration
-│   ├── tsconfig.json: TypeScript configuration
-│   └── vite.config.ts: Vite configuration
+│   ├── next.config.ts: Next.js configuration
+│   └── tsconfig.json: TypeScript configuration
 │
 ├── docs/: documentations
 │   ├── structure.md: structure of the project
